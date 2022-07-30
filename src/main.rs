@@ -7,11 +7,11 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1..=100);
 
-    // println!("The secret number is: {secret_number}");
+    println!("The secret number is: {secret_number}");
 
-    let max_tries = 3;
+    const MAX_TRIES: i8 = 3;
     let mut attemp = 0;
-    while attemp < max_tries {
+    while attemp < MAX_TRIES {
         println!("Please input your guess.");
 
         let mut guess = String::new();
@@ -27,18 +27,25 @@ fn main() {
 
         println!("You guessed: {guess}");
 
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
+        match guess_number(guess, secret_number) {
+            Ok(msg) => {
+                println!("{}", msg);
                 break;
             }
+            Err(msg) => println!("{}", msg),
         }
 
         attemp += 1;
     }
-    if attemp >= max_tries {
+    if attemp >= MAX_TRIES {
         println!("The secret number was: {secret_number}");
     }
+}
+
+fn guess_number(guess: u32, secret_number: u32) -> Result<&'static str, &'static str> {
+    match guess.cmp(&secret_number) {
+        Ordering::Less => return Err("Too small!"),
+        Ordering::Greater => return Err("Too big!"),
+        Ordering::Equal => return Ok("You win!"),
+    };
 }
