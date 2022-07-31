@@ -29,10 +29,10 @@ fn main() {
 
         match guess_number(guess, secret_number) {
             (false, msg) => {
-                println!("{}", msg);
+                println!("{msg}");
             }
             (true, msg) => {
-                println!("{}", msg);
+                println!("{msg}");
                 break;
             }
         }
