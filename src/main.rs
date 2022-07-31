@@ -28,24 +28,26 @@ fn main() {
         println!("You guessed: {guess}");
 
         match guess_number(guess, secret_number) {
-            Ok(msg) => {
+            (false, msg) => {
+                println!("{}", msg);
+            }
+            (true, msg) => {
                 println!("{}", msg);
                 break;
             }
-            Err(msg) => println!("{}", msg),
         }
 
         attemp += 1;
-    }
-    if attemp >= MAX_TRIES {
-        println!("The secret number was: {secret_number}");
+        if attemp == MAX_TRIES {
+            println!("The secret number was: {secret_number}");
+        }
     }
 }
 
-fn guess_number(guess: u32, secret_number: u32) -> Result<&'static str, &'static str> {
+fn guess_number(guess: u32, secret_number: u32) -> (bool, &'static str) {
     match guess.cmp(&secret_number) {
-        Ordering::Less => return Err("Too small!"),
-        Ordering::Greater => return Err("Too big!"),
-        Ordering::Equal => return Ok("You win!"),
+        Ordering::Less => return (false, "Too small!"),
+        Ordering::Greater => return (false, "Too big!"),
+        Ordering::Equal => return (true, "You win!"),
     };
 }
